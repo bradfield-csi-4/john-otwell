@@ -1,9 +1,20 @@
 #include <dirent.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int printsize(char *name) {
+  struct stat stbuf;
+  stat(name, &stbuf);
+  printf("%li\n", stbuf.st_size);
+  return 0;
+}
 
 int printif(int flag_thrown, char *toprint) {
   if (flag_thrown || toprint[0] != '.') {
     printf("%s\n", toprint);
+    printsize(toprint);
   }
   return 0;
 }
@@ -21,7 +32,7 @@ int dodir(char *dirname) {
   return 0;
 }
 
-int domore(int ndir, char **dirnames) {
+int domultiple(int ndir, char **dirnames) {
   for (int i = 1; i < ndir; i++) {
     printf("%s:\n", dirnames[i]);
     dodir(dirnames[i]);
@@ -35,6 +46,6 @@ int main(int argc, char **argv) {
   if (argc <= 2) {
     dodir(targetDir);
   } else {
-    domore(argc, argv);
+    domultiple(argc, argv);
   }
 }
