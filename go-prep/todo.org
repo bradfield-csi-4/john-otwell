@@ -1,0 +1,16 @@
+#+title: Todo
+- Function to determine what number the current xkcd is
+  - num property in JSON found at =xkcd.com/info.0.json=
+- Get all json objects from 1 to current and save to json file
+  - Bonus: check if file already exists and append as necessary if so
+- Call all URL's
+  - Make it parallel
+  - ~make~ a slice and make its length however many xkcd's
+  - call in GoChannel and make the correct space in the slice equal to the correct xkcd
+  - should they all be strings?
+  - Make it a JSON array and write to file
+- Make search work
+  - How should search be implemented?
+  - SQLite?
+  - Probably easier just to use the text file
+- Print url and transcript
