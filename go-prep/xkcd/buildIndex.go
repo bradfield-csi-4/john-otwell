@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -28,12 +29,28 @@ type XKCDResponse struct {
 	Year       string `json:"year"`
 }
 
-func buildIndex() {
+func makeOrUpdate() {
+	current := getCurrent()
+	if indexExists() {
+		files, err := ioutil.ReadDir(indexDirName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		latestInIndex := len(files)
+		if uint(latestInIndex) < current {
+			updateIndex(uint(latestInIndex)+1, current)
+		}
+	} else {
+		buildIndex(current)
+	}
+}
+
+func buildIndex(current uint) {
 	err := os.Mkdir(indexDirName, 0777)
 	if err != nil {
 		log.Fatal(err)
 	}
-	updateIndex(1, 5)
+	updateIndex(1, current)
 }
 
 func updateIndex(start uint, end uint) {

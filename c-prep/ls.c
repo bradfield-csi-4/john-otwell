@@ -4,17 +4,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int printsize(char *name) {
+int mkstringsize(char *name, char *size) {
   struct stat stbuf;
   stat(name, &stbuf);
-  printf("%li\n", stbuf.st_size);
+  sprintf(size, "%li", stbuf.st_size);
   return 0;
 }
 
 int printif(int flag_thrown, char *toprint) {
   if (flag_thrown || toprint[0] != '.') {
-    printf("%s\n", toprint);
-    printsize(toprint);
+    char size[50];
+    mkstringsize(toprint, size);
+    printf("%-24s%10s\n", toprint, size);
   }
   return 0;
 }
@@ -22,6 +23,7 @@ int printif(int flag_thrown, char *toprint) {
 int dodir(char *dirname) {
   DIR *dirp = opendir(dirname);
 
+  printf("%-24s%10s\n", "name", "size");
   for (struct dirent *entry = readdir(dirp); entry != NULL;
        entry = readdir(dirp)) {
     printif(0, entry->d_name);
